@@ -1,0 +1,691 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>جذر JATHR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=Tajawal:wght@400;500;700&display=swap">
+<style>
+/* Layout: single phone-width app shell (max 480px, centered), sticky top bar, scrolling screens, fixed bottom nav.
+   Palette: mist (bg), water blue, leaf green, root brown, sand. Type: Reem Kufi display / Tajawal body. */
+:root{
+  --bg:#EDF4F0; --surface:#FFFFFF; --surface2:#E2EEE8; --fg:#10292B; --muted:#587270; --line:#D2E1DA;
+  --water:#1B86AE; --water-soft:#D8EEF6; --leaf:#2F9A5A; --leaf-ink:#1E6B3F; --leaf-soft:#DCF1E4;
+  --root:#8B5A33; --sand:#F1E3CC; --warn:#B26E0C; --btn:#1F7A45; --btn-fg:#FFFFFF; --shadow:0 6px 22px rgba(16,41,43,.08);
+  --display:'Reem Kufi','Tajawal',system-ui,sans-serif; --body:'Tajawal',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A1B; --surface:#12292B; --surface2:#183436; --fg:#E6F2EE; --muted:#92B0AB; --line:#234446;
+    --water:#5CC3E8; --water-soft:#143B49; --leaf:#5FD08A; --leaf-ink:#7BE0A0; --leaf-soft:#173F2B;
+    --root:#D3A070; --sand:#3A2F1E; --warn:#E8B04A; --btn:#5FD08A; --btn-fg:#07261A; --shadow:0 6px 22px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A1B; --surface:#12292B; --surface2:#183436; --fg:#E6F2EE; --muted:#92B0AB; --line:#234446;
+  --water:#5CC3E8; --water-soft:#143B49; --leaf:#5FD08A; --leaf-ink:#7BE0A0; --leaf-soft:#173F2B;
+  --root:#D3A070; --sand:#3A2F1E; --warn:#E8B04A; --btn:#5FD08A; --btn-fg:#07261A; --shadow:0 6px 22px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55;direction:rtl;margin:0;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--water);outline-offset:2px;border-radius:8px}
+h1,h2,h3,p{margin:0}
+.dsp{font-family:var(--display)}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate;display:inline-block}
+#root{min-height:100%}
+.shell{max-width:480px;margin:0 auto;min-height:100%;position:relative}
+.screen{padding-inline:16px;padding-block:14px 120px;display:flex;flex-direction:column;gap:16px;animation:in .28s ease both}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:8px}
+.brand b{font-family:var(--display);font-size:22px;line-height:1}
+.brand small{font-size:10px;letter-spacing:.22em;color:var(--muted);font-family:var(--body);direction:ltr}
+.chip{font-size:11px;padding:3px 10px;border-radius:99px;background:var(--sand);color:var(--warn);white-space:nowrap;font-weight:500}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+.hero{border-radius:22px;padding:18px;color:#fff;background:linear-gradient(155deg,#0E5873 0%,#1B7E7A 55%,#2C8F55 100%);position:relative;overflow:hidden}
+.hero .eyebrow{font-size:12px;opacity:.85;letter-spacing:.04em}
+.hero h2{font-family:var(--display);font-size:24px;margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:12px;min-width:0}
+.stat .v{font-family:var(--display);font-size:24px;line-height:1.15}
+.stat .v small{font-size:12px;font-family:var(--body);opacity:.9;margin-inline-start:4px}
+.stat .l{font-size:12px;opacity:.92}
+.stat svg{opacity:.95}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;min-width:0}
+.tile .v{font-family:var(--display);font-size:24px;line-height:1.2}
+.tile .l{font-size:12.5px;color:var(--muted)}
+.quote{font-family:var(--display);font-size:17px;text-align:center;color:var(--leaf-ink);padding:6px 8px}
+.h2{font-family:var(--display);font-size:26px;line-height:1.25;text-wrap:balance}
+.sub{color:var(--muted);font-size:13.5px}
+.lbl{font-size:12px;color:var(--muted);letter-spacing:.03em}
+
+/* buttons */
+.btn{border:0;border-radius:14px;padding:13px 18px;background:var(--btn);color:var(--btn-fg);font-weight:700;font-size:16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.btn.sm{width:auto;padding:9px 14px;font-size:14px;border-radius:12px}
+.btn.ghost{background:transparent;color:var(--fg);border:1.5px solid var(--line)}
+.btn.water{background:var(--water);color:#06222E}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn:active{transform:scale(.98)}
+.link{background:none;border:0;color:var(--water);font-weight:700;padding:4px 0}
+
+/* segmented */
+.seg{display:flex;background:var(--surface2);border-radius:14px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:11px;font-weight:700;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 6px rgba(16,41,43,.12)}
+
+/* nav */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);z-index:30;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-top:1px solid var(--line);padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px))}
+.nav button{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;color:var(--muted);font-size:11px;font-weight:500;border-radius:12px}
+.nav button[aria-current="page"]{color:var(--leaf-ink);font-weight:700}
+.nav button[aria-current="page"] .pill{background:var(--leaf-soft)}
+.nav .pill{padding:4px 16px;border-radius:99px;display:flex}
+
+/* progress */
+.bar{height:10px;border-radius:99px;background:var(--surface2);overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:99px;background:var(--leaf);transition:width .6s ease}
+.bar.w>i{background:var(--water)}
+
+/* chart text */
+.t-muted{fill:var(--muted);font-family:var(--body);font-size:10px}
+.t-fg{fill:var(--fg);font-family:var(--display);font-size:11px}
+.row{display:flex;align-items:center;gap:12px}
+.grow{flex:1;min-width:0}
+.between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+
+/* sheet */
+.backdrop{position:fixed;inset:0;background:rgba(5,20,22,.55);z-index:50;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet{width:min(480px,100%);background:var(--surface);border-radius:24px 24px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));max-height:92%;overflow:auto;animation:up .28s ease}
+@keyframes up{from{transform:translateY(40px)}to{transform:none}}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:700;font-size:14px}
+.input{width:100%;border:1.5px solid var(--line);background:var(--bg);border-radius:12px;padding:12px;font-size:16px}
+.err{color:#C0392B;font-size:12.5px}
+:root[data-theme="dark"] .err{color:#FF8A7A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .err{color:#FF8A7A}}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(90px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:99px;z-index:60;font-weight:700;font-size:14px;max-width:calc(100% - 32px);text-align:center;animation:in .25s ease}
+
+/* welcome */
+.welcome{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:28px 20px calc(24px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,var(--bg) 0%,var(--leaf-soft) 100%)}
+.welcome h1{font-family:var(--display);font-size:64px;line-height:1}
+.welcome .en{letter-spacing:.5em;font-size:12px;color:var(--muted);direction:ltr;margin-top:4px;margin-inline-start:.5em}
+.slogan{font-family:var(--display);font-size:19px;color:var(--leaf-ink);text-wrap:balance}
+
+/* cycle */
+.stage{display:flex;gap:12px;align-items:flex-start}
+.badge-ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;flex:none}
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bd{border-radius:18px;padding:14px;text-align:center;border:1.5px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.bd.lock{border-style:dashed;background:transparent;color:var(--muted)}
+.bd .medal{width:62px;height:62px;border-radius:50%;display:grid;place-items:center}
+.pill-s{font-size:11.5px;padding:2px 9px;border-radius:99px;background:var(--surface2);color:var(--muted);font-weight:500}
+.pill-s.ok{background:var(--leaf-soft);color:var(--leaf-ink)}
+.drop-anim{animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.mapwrap{border-radius:18px;overflow:hidden;border:1px solid var(--line)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-inline-end:5px;vertical-align:middle}
+.sensor{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.sensor:last-child{border:0}
+</style>
+
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+const {useState,useEffect,useRef} = React;
+const html = htm.bind(React.createElement);
+const fmt = n => Math.round(n).toLocaleString('en-US');
+
+/* ---------- Icons ---------- */
+const P = {
+  drop:'M12 3c3.5 4.2 6 7.2 6 10.5A6 6 0 0 1 6 13.5C6 10.2 8.5 7.2 12 3z',
+  leaf:'M5 19C5 10 10 5 19 5c0 9-5 14-13 14z M5 19l8-8',
+  tree:'M12 3a5 5 0 0 0-4 8 4.5 4.5 0 0 0 4 6 4.5 4.5 0 0 0 4-6 5 5 0 0 0-4-8z M12 17v4',
+  home:'M4 11l8-7 8 7v9H4z M10 20v-6h4v6',
+  hood:'M2 20v-6l3.5-3L9 14v6z M11 20V8l5-4 5 4v12z',
+  trophy:'M8 4h8v5a4 4 0 0 1-8 0z M8 6H4v2a3 3 0 0 0 4 3 M16 6h4v2a3 3 0 0 1-4 3 M12 13v4 M8 20h8 M10 17h4',
+  user:'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M4 21c0-4 4-6 8-6s8 2 8 6',
+  recycle:'M7 7h10l-3-3 M17 17H7l3 3',
+  refresh:'M20 12a8 8 0 1 1-2.5-5.8 M20 4v5h-5',
+  chart:'M4 20V4 M4 20h16 M8 16v-5 M12 16V8 M16 16v-3',
+  check:'M5 12l5 5 9-10',
+  lock:'M6 11h12v9H6z M8 11V8a4 4 0 0 1 8 0v3',
+  plus:'M12 5v14M5 12h14',
+  close:'M6 6l12 12M18 6L6 18',
+  play:'M8 5v14l11-7z',
+  root:'M12 3v8 M12 11c-3 0-5 2-5 5 M12 11c3 0 5 2 5 5 M12 13c0 3-1 5-1 8 M7 16c-2 0-3 2-3 4 M17 16c2 0 3 2 3 4',
+  sensor:'M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0 M7.5 7.5a6 6 0 0 0 0 9 M16.5 7.5a6 6 0 0 1 0 9'
+};
+const Ic = ({n,s=22,w=1.8}) => html`<svg viewBox="0 0 24 24" width=${s} height=${s} fill="none" stroke="currentColor" strokeWidth=${w} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d=${P[n]}/></svg>`;
+
+const Mark = ({s=72}) => html`<svg viewBox="0 0 120 140" width=${s} height=${s*140/120} aria-hidden="true">
+  <path d="M60 8c19 23 34 40 34 58a34 34 0 0 1-68 0C26 48 41 31 60 8z" fill="var(--water)"/>
+  <path d="M60 78V50 M60 62c-9-1-14-7-15-15 9 0 15 5 15 15z M60 66c8-1 13-6 14-13-8 0-14 4-14 13z" stroke="#fff" strokeWidth="3.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+  <path d="M60 100v14 M60 106c-8 0-14 6-15 14 M60 106c8 0 14 6 15 14 M60 114c0 8-2 14-2 22 M45 120c-6 0-10 4-11 10 M75 120c6 0 10 4 11 10" stroke="var(--root)" strokeWidth="4" fill="none" strokeLinecap="round"/>
+</svg>`;
+
+/* ---------- Demo data (replace with sensor / meter feeds later) ---------- */
+/* DataSource is the single place the app reads readings from. Today: manual entries + sample data.
+   Later: a water meter / flow sensor / soil-moisture feed can push the same {liters, period, area, source} records. */
+const BASE = {liters:1240, area:18, trees:6, plants:22, reduction:24, points:240, weekLiters:320, invited:3, claimed:['c2'], region:'najd', myPlants:[],
+  readings:[
+    {id:1, liters:420, period:'هذا الأسبوع', area:6, source:'sample'},
+    {id:2, liters:380, period:'هذا الأسبوع', area:5, source:'sample'},
+    {id:3, liters:440, period:'هذا الشهر', area:7, source:'sample'}
+  ]};
+const DataSource = {
+  key:'jathr-proto-v1',
+  load(){ try{ const r = localStorage.getItem(this.key); if(r) return {...BASE, ...JSON.parse(r)}; }catch(e){} return JSON.parse(JSON.stringify(BASE)); },
+  save(s){ try{ localStorage.setItem(this.key, JSON.stringify(s)); }catch(e){} },
+  clear(){ try{ localStorage.removeItem(this.key); }catch(e){} }
+};
+
+const HOUSES = [
+  {n:'#001',x:55,y:70,l:1240,t:6,me:1},{n:'#007',x:88,y:32,l:980,t:5},{n:'#012',x:150,y:45,l:1560,t:9},{n:'#015',x:190,y:80,l:720,t:3},
+  {n:'#018',x:270,y:50,l:1890,t:11},{n:'#021',x:300,y:92,l:430,t:2},{n:'#024',x:50,y:165,l:1110,t:6},{n:'#027',x:85,y:195,l:860,t:4},
+  {n:'#030',x:150,y:160,l:1320,t:8},{n:'#033',x:185,y:192,l:540,t:3},{n:'#036',x:275,y:170,l:1470,t:9},{n:'#039',x:305,y:202,l:390,t:2},
+  {n:'#041',x:60,y:285,l:1020,t:5},{n:'#043',x:150,y:292,l:690,t:3},{n:'#045',x:200,y:272,l:1750,t:10},{n:'#048',x:290,y:292,l:260,t:1}
+];
+const level = l => l>=1200?{k:'عالية',c:'var(--leaf)'}:l>=700?{k:'متوسطة',c:'var(--water)'}:{k:'جديدة',c:'#D99A2B'};
+
+const CYCLE = [
+  {t:'جمع',s:'مياه المغاسل والاستحمام',ic:'drop',d:'تُجمع مياه المغاسل والاستحمام في مسار منفصل بدل أن تذهب مباشرة إلى الصرف.',f:'لاحقًا: عدّاد تدفق عند نقطة الجمع يسجّل الكمية تلقائيًا.'},
+  {t:'معالجة',s:'وحدة منزلية محلية',ic:'refresh',d:'وحدة منزلية محلية تجهّز المياه الرمادية لإعادة استخدامها. تفاصيل الوحدة وجودة المياه تُحدَّد وتُختبر في المرحلة التجريبية.',f:'لاحقًا: حساس لحالة الوحدة وتنبيه عند الصيانة.'},
+  {t:'إعادة استخدام',s:'ري النباتات والأشجار',ic:'leaf',d:'توجَّه المياه الجاهزة إلى ري النباتات والأشجار والمساحات الخضراء حول المنزل.',f:'لاحقًا: حساس رطوبة التربة لمتابعة صحة النباتات.'},
+  {t:'قياس',s:'منصة تجمع أثر المنزل والحي',ic:'chart',d:'تسجّل المنصة الكمية والمساحة المروية، وتجمع أثر منزلك مع أثر بقية المنازل في مؤشر الحي.',f:'لاحقًا: ربط العدادات بالمنصة لتحديث الأرقام دون إدخال يدوي.'}
+];
+const JOURNEY = [
+  {t:'منزل',d:'تبدأ القطرة من مغسلة أو دش في منزلك',ic:'home'},
+  {t:'مياه رمادية',d:'تُجمع مياه المغاسل والاستحمام في مسار منفصل',ic:'drop'},
+  {t:'معالجة',d:'تمر على وحدة منزلية محلية (تصوّر مبدئي)',ic:'refresh'},
+  {t:'إعادة استخدام',d:'تتحول من مياه مهدورة إلى مورد جديد',ic:'recycle'},
+  {t:'ري',d:'تصل إلى جذور النباتات والأشجار',ic:'leaf'},
+  {t:'قياس الأثر',d:'تُسجَّل الكمية والمساحة المروية في المنصة',ic:'chart'},
+  {t:'أثر الحي',d:'تنضم قطرتك إلى مؤشر الحي الأخضر',ic:'hood'}
+];
+
+/* ---------- Charts ---------- */
+const Bars = ({data,color='var(--water)',unit='',h=150}) => {
+  const W=300, pl=8, pr=8, pt=20, pb=24, n=data.length;
+  const max = Math.max(...data.map(d=>d.v))*1.15, bw=(W-pl-pr)/n, base=h-pb;
+  return html`<svg viewBox=${'0 0 '+W+' '+h} width="100%" role="img" aria-label="رسم بياني للبيانات التجريبية">
+    <line x1=${pl} x2=${W-pr} y1=${base} y2=${base} stroke="var(--line)" strokeWidth="1.5"/>
+    <line x1=${pl} x2=${W-pr} y1=${pt+(base-pt)/2} y2=${pt+(base-pt)/2} stroke="var(--line)" strokeDasharray="3 4"/>
+    ${data.map((d,i)=>{ const bh=(d.v/max)*(base-pt), x=pl+i*bw+bw*.2, last=i===n-1;
+      return html`<g key=${i}>
+        <rect x=${x} y=${base-bh} width=${bw*.6} height=${bh} rx="5" fill=${color} opacity=${last?1:.55}/>
+        <text x=${x+bw*.3} y=${base-bh-5} textAnchor="middle" className="t-fg">${fmt(d.v)}</text>
+        <text x=${x+bw*.3} y=${h-8} textAnchor="middle" className="t-muted">${d.l}</text></g>`; })}
+  </svg>`;
+};
+const Line = ({data,color='var(--leaf)',h=150}) => {
+  const W=300, pl=18, pr=18, pt=22, pb=24, n=data.length;
+  const max=Math.max(...data.map(d=>d.v))*1.12, min=Math.min(...data.map(d=>d.v))*0.6, base=h-pb;
+  const X=i=>pl+i*((W-pl-pr)/(n-1)), Y=v=>base-((v-min)/(max-min))*(base-pt);
+  const pts=data.map((d,i)=>X(i)+','+Y(d.v)).join(' ');
+  const area='M'+X(0)+','+base+' L'+pts.split(' ').join(' L')+' L'+X(n-1)+','+base+' Z';
+  return html`<svg viewBox=${'0 0 '+W+' '+h} width="100%" role="img" aria-label="رسم خطي للبيانات التجريبية">
+    <line x1=${pl} x2=${W-pr} y1=${base} y2=${base} stroke="var(--line)" strokeWidth="1.5"/>
+    <line x1=${pl} x2=${W-pr} y1=${pt+(base-pt)/2} y2=${pt+(base-pt)/2} stroke="var(--line)" strokeDasharray="3 4"/>
+    <path d=${area} fill=${color} opacity=".14"/>
+    <polyline points=${pts} fill="none" stroke=${color} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round"/>
+    ${data.map((d,i)=>html`<g key=${i}><circle cx=${X(i)} cy=${Y(d.v)} r=${i===n-1?5.5:3} fill=${i===n-1?color:'var(--surface)'} stroke=${color} strokeWidth="2"/>
+      <text x=${X(i)} y=${h-8} textAnchor="middle" className="t-muted">${d.l}</text>
+      ${i===n-1&&html`<text x=${X(i)} y=${Y(d.v)-11} textAnchor="middle" className="t-fg">${fmt(d.v)}</text>`}</g>`)}
+  </svg>`;
+};
+const Gauge = ({v,size=190,label='مؤشر الحي',small}) => {
+  const [on,setOn]=useState(false);
+  useEffect(()=>{const t=setTimeout(()=>setOn(true),80);return()=>clearTimeout(t)},[]);
+  const r=64,C=2*Math.PI*r;
+  return html`<svg viewBox="0 0 160 160" width=${size} height=${size} role="img" aria-label=${label+' '+Math.round(v)+' من 100'}>
+    <circle cx="80" cy="80" r=${r} fill="none" stroke=${small?'rgba(255,255,255,.25)':'var(--surface2)'} strokeWidth="14"/>
+    <circle cx="80" cy="80" r=${r} fill="none" stroke=${small?'#fff':'var(--leaf)'} strokeWidth="14" strokeLinecap="round" strokeDasharray=${C}
+      strokeDashoffset=${on?C*(1-v/100):C} transform="rotate(-90 80 80)" style=${{transition:'stroke-dashoffset 1.1s ease'}}/>
+    <text x="80" y="82" textAnchor="middle" style=${{fontFamily:'var(--display)',fontSize:'40px',fill:small?'#fff':'var(--fg)'}}>${Math.round(v)}</text>
+    <text x="80" y="104" textAnchor="middle" style=${{fontSize:'11px',fill:small?'#fff':'var(--muted)',fontFamily:'var(--body)'}}>من 100</text>
+  </svg>`;
+};
+
+/* ---------- Small parts ---------- */
+const TopBar = () => html`<header class="top">
+  <div class="brand"><${Mark} s=${26}/><div><b>جذر</b><br/><small>JATHR</small></div></div>
+  <span class="chip">نسخة تجريبية · بيانات للعرض</span></header>`;
+const Seg = ({items,cur,go}) => html`<div class="seg" role="group">${items.map(i=>html`<button key=${i.id} aria-pressed=${cur===i.id} onClick=${()=>go(i.id)}>${i.l}</button>`)}</div>`;
+const Note = ({children}) => html`<p class="sub" style=${{textAlign:'center'}}>${children}</p>`;
+
+/* ---------- Screens ---------- */
+const Welcome = ({start}) => html`<div class="welcome">
+  <div style=${{height:8}}></div>
+  <div style=${{display:'flex',flexDirection:'column',alignItems:'center',gap:14}}>
+    <div class="drop-anim"><${Mark} s=${116}/></div>
+    <div><h1>جذر</h1><div class="en">JATHR</div></div>
+    <p class="slogan">«من كل منزل قطرة… ومن كل قطرة أثر أخضر»</p>
+  </div>
+  <div style=${{display:'flex',flexDirection:'column',gap:10,alignItems:'center',width:'100%',maxWidth:380}}>
+    <h2 class="h2" style=${{fontSize:24}}>«حوّل مياهك الرمادية إلى أثر أخضر»</h2>
+    <p class="sub">«تابع كمية المياه التي أعدت استخدامها، وشاهد كيف يساهم منزلك في زيادة خضرة حيّك.»</p>
+    <button class="btn" style=${{marginTop:8,padding:'16px 18px',fontSize:18}} onClick=${start}>ابدأ رحلتك <${Ic} n="leaf" s=${22}/></button>
+    <span class="chip">نسخة تجريبية · الأرقام بيانات تجريبية للعرض</span>
+  </div></div>`;
+
+const Home = ({s,go,openAdd,openJourney,nextCh}) => html`<main class="screen">
+  <div><h1 class="h2">مرحبًا بك في جذر 🌱</h1><p class="sub">منزل جذر #001 · أهلًا ريم</p></div>
+  <section class="hero" aria-label="أثر منزلي">
+    <div class="between"><div><div class="eyebrow">بطاقة</div><h2>أثر منزلي</h2></div><${Ic} n="root" s=${34}/></div>
+    <div class="grid2" style=${{marginTop:14}}>
+      <div class="stat"><${Ic} n="drop" s=${20}/><div class="v"><span class="num">${fmt(s.liters)}</span><small>لتر</small></div><div class="l">المياه المعاد استخدامها</div></div>
+      <div class="stat"><${Ic} n="tree" s=${20}/><div class="v"><span class="num">${s.trees}</span><small>أشجار</small></div><div class="l">الأشجار التي ساهمت في رعايتها</div></div>
+      <div class="stat"><${Ic} n="leaf" s=${20}/><div class="v"><span class="num">${s.area}</span><small>م²</small></div><div class="l">المساحة الخضراء المدعومة</div></div>
+      <div class="stat"><${Ic} n="recycle" s=${20}/><div class="v"><span class="num">${s.reduction}%</span></div><div class="l">نسبة خفض الاعتماد على المياه العذبة</div></div>
+    </div>
+    <p style=${{fontSize:11.5,opacity:.85,marginTop:12}}>أرقام تجريبية للعرض، وليست قياسات فعلية.</p>
+  </section>
+  <p class="quote">«كل قطرة تعيد استخدامها تصنع فرقًا.»</p>
+  <button class="btn" onClick=${openJourney}><${Ic} n="play" s=${20}/> شاهد رحلة القطرة</button>
+  <div class="grid2">
+    <button class="tile" style=${{textAlign:'start'}} onClick=${openAdd}><div class="badge-ic" style=${{background:'var(--water-soft)',color:'var(--water)'}}><${Ic} n="plus"/></div><div style=${{fontWeight:700,marginTop:8}}>إضافة قراءة</div><div class="l">سجّل ما أعدت استخدامه</div></button>
+    <button class="tile" style=${{textAlign:'start'}} onClick=${()=>go('cycle')}><div class="badge-ic" style=${{background:'var(--leaf-soft)',color:'var(--leaf-ink)'}}><${Ic} n="refresh"/></div><div style=${{fontWeight:700,marginTop:8}}>دورة جذر</div><div class="l">كيف تعمل الفكرة</div></button>
+  </div>
+  <button class="card" style=${{textAlign:'start',display:'flex',alignItems:'center',gap:12}} onClick=${()=>go('plants')}>
+    <div class="badge-ic" style=${{background:'var(--leaf-soft)',color:'var(--leaf-ink)'}}><${Ic} n="tree"/></div>
+    <div class="grow"><b>دليل النبات</b><div class="sub">النباتات المناسبة لمنطقتك وكيف تعتني بها</div></div></button>
+  ${nextCh&&html`<button class="card" style=${{textAlign:'start'}} onClick=${()=>go('challenges')}>
+    <div class="between"><b>التحدي القادم: ${nextCh.title}</b><span class="lbl">${Math.min(100,Math.round(nextCh.cur/nextCh.goal*100))}%</span></div>
+    <div class="bar" style=${{marginTop:10}}><i style=${{width:Math.min(100,nextCh.cur/nextCh.goal*100)+'%'}}></i></div></button>`}
+</main>`;
+
+const Cycle = ({go}) => {
+  const [i,setI]=useState(0);
+  const R=80,cx=130,cy=130;
+  const pos=k=>{const a=-Math.PI/2+k*Math.PI/2;return [cx+R*Math.cos(a),cy+R*Math.sin(a)]};
+  const cur=CYCLE[i];
+  return html`<main class="screen">
+    <div><h1 class="h2">دورة جذر</h1><p class="sub">اضغط على كل مرحلة لرؤية شرح مختصر.</p></div>
+    <div class="card" style=${{display:'flex',justifyContent:'center'}}>
+      <svg viewBox="0 0 260 260" width="100%" style=${{maxWidth:340}} aria-label="دورة جذر من أربع مراحل">
+        <circle cx=${cx} cy=${cy} r=${R} fill="none" stroke="var(--line)" strokeWidth="3" strokeDasharray="2 7" strokeLinecap="round"/>
+        <text x=${cx} y=${cy-4} textAnchor="middle" style=${{fontFamily:'var(--display)',fontSize:'26px',fill:'var(--fg)'}}>جذر</text>
+        <text x=${cx} y=${cy+14} textAnchor="middle" className="t-muted">دورة المياه</text>
+        ${CYCLE.map((c,k)=>{const [x,y]=pos(k),on=k===i;
+          return html`<g key=${k} role="button" tabIndex="0" aria-label=${(k+1)+' '+c.t} style=${{cursor:'pointer'}} onClick=${()=>setI(k)} onKeyDown=${e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setI(k)}}}>
+            <circle cx=${x} cy=${y} r=${on?31:26} fill=${on?'var(--leaf)':'var(--surface)'} stroke=${on?'var(--leaf)':'var(--water)'} strokeWidth="2.5" style=${{transition:'all .25s'}}/>
+            <g transform=${'translate('+(x-11)+','+(y-11)+') scale(.92)'} fill="none" stroke=${on?'#fff':'var(--water)'} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d=${P[c.ic]}/></g></g>`;})}
+        <text x=${cx} y="14" textAnchor="middle" className="t-fg">١ جمع</text>
+        <text x=${cx+R} y=${cy+50} textAnchor="middle" className="t-fg">٢ معالجة</text>
+        <text x=${cx} y="252" textAnchor="middle" className="t-fg">٣ إعادة استخدام</text>
+        <text x=${cx-R} y=${cy+50} textAnchor="middle" className="t-fg">٤ قياس</text>
+      </svg></div>
+    <section class="card" aria-live="polite">
+      <div class="stage"><div class="badge-ic" style=${{background:'var(--leaf-soft)',color:'var(--leaf-ink)'}}><${Ic} n=${cur.ic}/></div>
+        <div class="grow"><div class="lbl">المرحلة ${i+1} من 4</div><h2 class="dsp" style=${{fontSize:22}}>${cur.t}</h2><div class="sub">${cur.s}</div></div></div>
+      <p style=${{marginTop:12}}>${cur.d}</p>
+      <p class="sub" style=${{marginTop:10,padding:'10px 12px',background:'var(--surface2)',borderRadius:12}}>${cur.f}</p>
+      <div class="row" style=${{marginTop:12}}>
+        <button class="btn ghost sm" disabled=${i===0} onClick=${()=>setI(i-1)}>السابق</button>
+        <button class="btn sm" disabled=${i===3} onClick=${()=>setI(i+1)}>التالي</button></div>
+    </section>
+    <${Note}>هذه نسخة تجريبية لشرح الفكرة، ولا تعرض نتائج تقنية أو صحية مؤكدة.<//>
+  </main>`;
+};
+
+const Impact = ({s,go,openAdd}) => {
+  const saved=Math.round(s.liters*.8);
+  const goalL=2000, goalA=30, goalT=12;
+  return html`<main class="screen">
+    <${Seg} items=${[{id:'impact',l:'أثري'},{id:'stats',l:'بالأرقام'},{id:'plants',l:'دليل النبات'}]} cur="impact" go=${go}/>
+    <div><h1 class="h2">أثرك يبدأ من منزلك</h1><p class="sub">أرقام تجريبية للعرض تتحدّث مع كل قراءة تضيفها.</p></div>
+    <section class="card">
+      <div class="between"><b>المياه المعاد استخدامها والمياه المُوفَّرة</b><${Ic} n="drop" s=${20}/></div>
+      <div style=${{marginTop:12,display:'flex',flexDirection:'column',gap:12}}>
+        <div><div class="between"><span>معاد استخدامها</span><b class="num">${fmt(s.liters)} لتر</b></div><div class="bar w"><i style=${{width:Math.min(100,s.liters/goalL*100)+'%'}}></i></div></div>
+        <div><div class="between"><span>مياه عذبة تم توفيرها*</span><b class="num">${fmt(saved)} لتر</b></div><div class="bar w"><i style=${{width:Math.min(100,saved/goalL*100)+'%'}}></i></div></div>
+      </div>
+      <p class="sub" style=${{marginTop:10,fontSize:12}}>الهدف الشهري التجريبي ${fmt(goalL)} لتر. *التوفير يُحسب في العرض بافتراض 80% من المياه المعاد استخدامها.</p>
+    </section>
+    <section class="card">
+      <div class="between"><b>المساحة الخضراء المدعومة</b><span class="num dsp" style=${{fontSize:22}}>${s.area} م²</span></div>
+      <div class="bar" style=${{marginTop:10}}><i style=${{width:Math.min(100,s.area/goalA*100)+'%'}}></i></div>
+      <p class="sub" style=${{fontSize:12,marginTop:6}}>الهدف التجريبي ${goalA} م²</p>
+    </section>
+    <section class="card">
+      <div class="between"><b>الأشجار والنباتات التي تمت رعايتها</b><span class="sub">${s.plants} نبتة</span></div>
+      <div style=${{display:'flex',flexWrap:'wrap',gap:6,marginTop:12,color:'var(--leaf)'}}>
+        ${Array.from({length:Math.max(goalT,s.trees)}).map((_,k)=>html`<span key=${k} style=${{opacity:k<s.trees?1:.25}}><${Ic} n="tree" s=${28}/></span>`)}
+      </div>
+      <p class="sub" style=${{fontSize:12,marginTop:8}}>${s.trees} شجرة من هدف ${goalT}</p>
+    </section>
+    <button class="btn" onClick=${openAdd}><${Ic} n="plus" s=${20}/> إضافة قراءة جديدة</button>
+    <section class="card">
+      <b>آخر القراءات</b>
+      <div style=${{marginTop:8}}>${s.readings.slice(0,5).map(r=>html`<div key=${r.id} class="sensor">
+        <div><b class="num">${fmt(r.liters)} لتر</b> <span class="sub">· ${r.area} م²</span><div class="sub" style=${{fontSize:12}}>${r.period}</div></div>
+        <span class=${'pill-s'+(r.source==='manual'?' ok':'')}>${r.source==='manual'?'أدخلتها أنت':'بيانات تجريبية'}</span></div>`)}</div>
+    </section>
+  </main>`;
+};
+
+const Stats = ({s,hood,go}) => {
+  const cur=s.liters-940;
+  const water=[{l:'مايو',v:90},{l:'يونيو',v:150},{l:'يوليو',v:210},{l:'أغسطس',v:230},{l:'سبتمبر',v:260},{l:'أكتوبر',v:cur}];
+  const homes=[12,21,30,38,45,hood.homes].map((v,i)=>({l:['مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر'][i],v}));
+  const area=[310,480,610,720,820,hood.area].map((v,i)=>({l:['مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر'][i],v}));
+  const trees=[38,57,80,98,116,hood.trees].map((v,i)=>({l:['مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر'][i],v}));
+  return html`<main class="screen">
+    <${Seg} items=${[{id:'impact',l:'أثري'},{id:'stats',l:'بالأرقام'},{id:'plants',l:'دليل النبات'}]} cur="stats" go=${go}/>
+    <div><h1 class="h2">أثري بالأرقام</h1><p class="sub">بيانات تجريبية للعرض، لا تمثل قياسات فعلية.</p></div>
+    <section class="card"><b>المياه المعاد استخدامها في منزلي (لتر شهريًا)</b><${Bars} data=${water} color="var(--water)"/></section>
+    <section class="card"><b>نمو المشاركة المنزلية في الحي (منازل)</b><${Line} data=${homes} color="var(--water)"/></section>
+    <section class="card"><b>المساحات الخضراء المدعومة في الحي (م²)</b><${Line} data=${area} color="var(--leaf)"/></section>
+    <section class="card"><b>الأشجار التي تمت رعايتها في الحي</b><${Bars} data=${trees} color="var(--leaf)"/></section>
+    <${Note}>القيم الأخيرة في كل مخطط تتحدّث مع قراءاتك وعدد الجيران المدعوّين.<//>
+  </main>`;
+};
+
+const Hood = ({hood,idx,go}) => {
+  const lab = idx>=80?'أثر قوي':idx>=60?'أثر متنامٍ':'بداية واعدة';
+  return html`<main class="screen">
+    <${Seg} items=${[{id:'hood',l:'أثر الحي'},{id:'map',l:'الخريطة'}]} cur="hood" go=${go}/>
+    <div><h1 class="h2">حيّنا أكثر خضرة 🌱</h1><p class="sub">إجمالي أثر المنازل المشاركة (بيانات تجريبية للعرض).</p></div>
+    <div class="grid2">
+      <div class="tile"><span style=${{color:'var(--water)'}}><${Ic} n="drop"/></span><div class="v num">${fmt(hood.liters)}</div><div class="l">لتر · إجمالي المياه المعاد استخدامها</div></div>
+      <div class="tile"><span style=${{color:'var(--leaf)'}}><${Ic} n="tree"/></span><div class="v num">${hood.trees}</div><div class="l">الأشجار التي تمت رعايتها</div></div>
+      <div class="tile"><span style=${{color:'var(--leaf)'}}><${Ic} n="leaf"/></span><div class="v num">${hood.area}</div><div class="l">م² · المساحات الخضراء المدعومة</div></div>
+      <div class="tile"><span style=${{color:'var(--root)'}}><${Ic} n="home"/></span><div class="v num">${hood.homes}</div><div class="l">منزلًا مشاركًا</div></div>
+    </div>
+    <section class="card" style=${{display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
+      <b>مؤشر الأثر البيئي للحي</b>
+      <${Gauge} v=${idx}/>
+      <span class="pill-s ok">${lab}</span>
+      <p class="sub" style=${{fontSize:12,textAlign:'center'}}>قيمة محسوبة من بيانات العرض (المياه 40% · الأشجار 25% · المساحة 20% · المنازل 15%)، وليست نتيجة حقيقية.</p>
+    </section>
+    <p class="quote">«كل منزل يضيف قطرة… وكل قطرة تكبر أثر الحي.»</p>
+  </main>`;
+};
+
+const MapView = ({s,go}) => {
+  const [sel,setSel]=useState('#001');
+  const hs=HOUSES.map(h=>h.me?{...h,l:s.liters,t:s.trees}:h);
+  const h=hs.find(x=>x.n===sel)||hs[0], lv=level(h.l);
+  return html`<main class="screen">
+    <${Seg} items=${[{id:'hood',l:'أثر الحي'},{id:'map',l:'الخريطة'}]} cur="map" go=${go}/>
+    <div><h1 class="h2">منازل جذر المشاركة</h1><p class="sub">خريطة تجريبية بمنازل وهمية. اضغط على أي نقطة.</p></div>
+    <div class="mapwrap"><svg viewBox="0 0 340 340" width="100%" role="group" aria-label="خريطة تجريبية للحي">
+      <rect width="340" height="340" fill="var(--leaf-soft)"/>
+      <g stroke="var(--surface)" strokeWidth="16"><line x1="0" y1="110" x2="340" y2="110"/><line x1="0" y1="232" x2="340" y2="232"/><line x1="110" y1="0" x2="110" y2="340"/><line x1="232" y1="0" x2="232" y2="340"/></g>
+      <g stroke="var(--line)" strokeWidth="1.5" strokeDasharray="6 6"><line x1="0" y1="110" x2="340" y2="110"/><line x1="0" y1="232" x2="340" y2="232"/><line x1="110" y1="0" x2="110" y2="340"/><line x1="232" y1="0" x2="232" y2="340"/></g>
+      <g fill="var(--leaf)" opacity=".35">${[[20,15],[130,18],[215,28],[320,25],[18,120],[250,140],[330,150],[25,225],[130,215],[255,230],[20,320],[110,322],[240,320],[325,318]].map((p,k)=>html`<circle key=${k} cx=${p[0]} cy=${p[1]} r="7"/>`)}</g>
+      ${hs.map(x=>{const l=level(x.l),on=x.n===sel;
+        return html`<g key=${x.n} role="button" tabIndex="0" aria-label=${'منزل '+x.n} style=${{cursor:'pointer'}} onClick=${()=>setSel(x.n)} onKeyDown=${e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setSel(x.n)}}}>
+          <circle cx=${x.x} cy=${x.y} r="20" fill="transparent"/>
+          ${x.me&&html`<circle cx=${x.x} cy=${x.y} r="17" fill="none" stroke="var(--root)" strokeWidth="2" strokeDasharray="3 3"/>`}
+          ${on&&html`<circle cx=${x.x} cy=${x.y} r="15" fill=${l.c} opacity=".25"/>`}
+          <circle cx=${x.x} cy=${x.y} r=${on?10:8} fill=${l.c} stroke="var(--surface)" strokeWidth="2.5"/>
+          <g transform=${'translate('+(x.x-6)+','+(x.y-6)+') scale(.5)'} fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d=${P.home}/></g></g>`;})}
+      <text x="12" y="336" className="t-muted">بيانات وهمية للعرض</text>
+    </svg></div>
+    <div class="legend"><span><i style=${{background:'var(--leaf)'}}></i>مشاركة عالية</span><span><i style=${{background:'var(--water)'}}></i>متوسطة</span><span><i style=${{background:'#D99A2B'}}></i>جديدة</span><span><i style=${{background:'transparent',border:'2px dashed var(--root)'}}></i>منزلي</span></div>
+    <section class="card" aria-live="polite">
+      <div class="between"><h2 class="dsp" style=${{fontSize:22}}>منزل جذر ${h.n}${h.me?' (منزلي)':''}</h2><span class="pill-s" style=${{background:'var(--surface2)',color:lv.c==='#D99A2B'?'var(--warn)':'var(--fg)'}}>${lv.k}</span></div>
+      <div class="grid2" style=${{marginTop:12}}>
+        <div><div class="lbl">المياه المعاد استخدامها</div><b class="num dsp" style=${{fontSize:20}}>${fmt(h.l)} لتر</b></div>
+        <div><div class="lbl">الأشجار المدعومة</div><b class="num dsp" style=${{fontSize:20}}>${h.t}</b></div></div>
+      <div style=${{marginTop:12}}><div class="lbl">مستوى المشاركة</div><div class="bar"><i style=${{width:Math.min(100,h.l/20)+'%',background:lv.c}}></i></div></div>
+    </section>
+    <${Note}>الخريطة تعرض ${hs.length} منزلًا كعيّنة من منازل الحي.<//>
+  </main>`;
+};
+
+const Challenges = ({s,go,list,claim,invite}) => html`<main class="screen">
+  <${Seg} items=${[{id:'challenges',l:'التحديات'},{id:'badges',l:'شاراتي'}]} cur="challenges" go=${go}/>
+  <div><h1 class="h2">تحديات جذر 🏆</h1><p class="sub">أكمل التحدي، اضغط «استلام» لتحصل على شارة استدامة ونقاط تجريبية.</p></div>
+  <div class="hero" style=${{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+    <div><div class="eyebrow">نقاطي التجريبية</div><div class="dsp num" style=${{fontSize:40,lineHeight:1.1}}>${fmt(s.points)}</div></div>
+    <div style=${{textAlign:'end'}}><div class="eyebrow">المستوى</div><div class="dsp" style=${{fontSize:26}}>${Math.floor(s.points/200)+1}</div></div></div>
+  ${list.map(c=>{const pct=Math.min(100,c.cur/c.goal*100),done=c.cur>=c.goal,got=s.claimed.includes(c.id);
+    return html`<section key=${c.id} class="card">
+      <div class="stage"><div class="badge-ic" style=${{background:got?'var(--leaf-soft)':'var(--water-soft)',color:got?'var(--leaf-ink)':'var(--water)'}}><${Ic} n=${got?'check':c.ic}/></div>
+        <div class="grow"><h2 class="dsp" style=${{fontSize:19}}>${c.title}</h2><p class="sub">${c.desc}</p></div></div>
+      <div class="between" style=${{marginTop:12}}><span class="sub num">${fmt(Math.min(c.cur,c.goal))} / ${fmt(c.goal)} ${c.unit}</span><span class="pill-s">+${c.pts} نقطة · شارة «${c.badge}»</span></div>
+      <div class="bar" style=${{marginTop:8}}><i style=${{width:pct+'%'}}></i></div>
+      <div class="row" style=${{marginTop:12}}>
+        ${got?html`<span class="pill-s ok" style=${{padding:'8px 14px',fontSize:14}}>تم الاستلام ✓</span>`
+          :html`<button class="btn sm" disabled=${!done} onClick=${()=>claim(c)}>${done?'استلام الشارة والنقاط':'لم يكتمل بعد'}</button>`}
+        ${c.id==='c3'&&!got&&html`<button class="btn ghost sm" disabled=${s.invited>=5} onClick=${invite}>دعوة جار (محاكاة)</button>`}
+        ${c.id==='c1'&&!got&&!done&&html`<span class="sub" style=${{fontSize:12}}>أضف قراءة من «أثري»</span>`}
+      </div></section>`;})}
+</main>`;
+
+const BADGES = [
+  {id:'b1',t:'بداية خضراء',ic:'leaf',d:'انضممت إلى جذر',ok:s=>true},
+  {id:'b2',t:'حافظ الماء',ic:'drop',d:'أكمل تحدي «قطرة تصنع فرقًا»',ok:s=>s.claimed.includes('c2')},
+  {id:'b3',t:'راعي الأشجار',ic:'tree',d:'ارعَ 10 أشجار',ok:s=>s.trees>=10,pr:s=>s.trees+' / 10'},
+  {id:'b4',t:'جارٍ مستدام',ic:'hood',d:'أكمل تحدي «جارٍ أخضر»',ok:s=>s.claimed.includes('c3')},
+  {id:'b5',t:'صانع الأثر',ic:'recycle',d:'أكمل تحدي «تحدي الأسبوع الأخضر»',ok:s=>s.claimed.includes('c1')}
+];
+const Badges = ({s,go}) => {
+  const n=BADGES.filter(b=>b.ok(s)).length;
+  return html`<main class="screen">
+    <${Seg} items=${[{id:'challenges',l:'التحديات'},{id:'badges',l:'شاراتي'}]} cur="badges" go=${go}/>
+    <div><h1 class="h2">شاراتي</h1><p class="sub">${n} من ${BADGES.length} شارات مفتوحة.</p></div>
+    <div class="bgrid">${BADGES.map(b=>{const ok=b.ok(s);
+      return html`<div key=${b.id} class=${'bd'+(ok?'':' lock')}>
+        <div class="medal" style=${{background:ok?'var(--leaf-soft)':'var(--surface2)',color:ok?'var(--leaf-ink)':'var(--muted)'}}><${Ic} n=${ok?b.ic:'lock'} s=${30}/></div>
+        <b>${b.t}</b><span class="sub" style=${{fontSize:12}}>${b.d}</span>
+        <span class=${'pill-s'+(ok?' ok':'')}>${ok?'مفتوحة':(b.pr?'مقفلة · '+b.pr(s):'مقفلة')}</span></div>`;})}</div>
+  </main>`;
+};
+
+const Profile = ({s,go,list,reset,openJourney}) => {
+  const [conf,setConf]=useState(false);
+  const nx=list.find(c=>!s.claimed.includes(c.id));
+  const pct=nx?Math.min(100,nx.cur/nx.goal*100):100;
+  return html`<main class="screen">
+    <section class="card" style=${{display:'flex',alignItems:'center',gap:14}}>
+      <div class="dsp" style=${{width:64,height:64,borderRadius:'50%',background:'var(--leaf)',color:'#fff',display:'grid',placeItems:'center',fontSize:30}}>ر</div>
+      <div><h1 class="dsp" style=${{fontSize:26,lineHeight:1.2}}>ريم</h1><div class="sub">منزل جذر #001</div></div></section>
+    <section class="card"><b>إجمالي الأثر</b>
+      <div class="grid2" style=${{marginTop:10}}>
+        <div class="tile" style=${{background:'var(--bg)'}}><div class="v num" style=${{color:'var(--water)'}}>${fmt(s.liters)}</div><div class="l">لتر معاد استخدامها</div></div>
+        <div class="tile" style=${{background:'var(--bg)'}}><div class="v num" style=${{color:'var(--leaf-ink)'}}>${s.trees}</div><div class="l">أشجار</div></div>
+        <div class="tile" style=${{background:'var(--bg)'}}><div class="v num" style=${{color:'var(--leaf-ink)'}}>${s.area}</div><div class="l">م² مساحة خضراء</div></div>
+        <div class="tile" style=${{background:'var(--bg)'}}><div class="v num" style=${{color:'var(--root)'}}>${fmt(s.points)}</div><div class="l">نقطة</div></div></div></section>
+    <section class="card"><div class="between"><b>هدفي القادم</b><span class="lbl">${Math.round(pct)}%</span></div>
+      ${nx?html`<p class="sub">${nx.title}: ${nx.desc}</p>`:html`<p class="sub">أكملت كل التحديات الحالية.</p>`}
+      <div class="bar" style=${{marginTop:8}}><i style=${{width:pct+'%'}}></i></div></section>
+    <button class="btn" onClick=${openJourney}><${Ic} n="play" s=${20}/> شاهد رحلة القطرة</button>
+    <section class="card"><b>ربط الحساسات والعدادات</b><p class="sub">الأرقام الآن تُدخل يدويًا. هذه المصادر مخطط لها في المرحلة التجريبية، وكلها ستغذّي نفس القراءات.</p>
+      <div style=${{marginTop:6}}>${['عدّاد المياه المنزلي','عدّاد تدفق وحدة المعالجة','حساس رطوبة التربة'].map(x=>html`<div key=${x} class="sensor"><span class="row"><${Ic} n="sensor" s=${20}/>${x}</span><span class="pill-s">غير متصل</span></div>`)}</div></section>
+    <button class="btn ghost" onClick=${()=>{ if(conf){reset();setConf(false);} else setConf(true); }}>${conf?'اضغط مرة أخرى لتأكيد إعادة الضبط':'إعادة ضبط بيانات العرض'}</button>
+  </main>`;
+};
+
+
+const REGIONS=[
+  {id:'najd',l:'نجد والرياض',n:'حار وجاف صيفًا، شتاء معتدل'},
+  {id:'hijaz',l:'الساحل الغربي',n:'حار ورطب'},
+  {id:'east',l:'الشرقية',n:'رطوبة عالية وتربة مالحة'},
+  {id:'asir',l:'المرتفعات',n:'معتدل وفيه أمطار موسمية'},
+  {id:'north',l:'الشمال',n:'حار صيفًا وبارد شتاءً'}
+];
+const PLANTS=[
+  {id:'p1',n:'نخيل التمر',k:'شجرة',r:['najd','east','hijaz','north'],sun:'شمس كاملة',w:'ري عميق 2–3 مرات أسبوعيًا صيفًا، وأقل شتاءً',c:['اجعل الري في حوض حول الجذع وليس على الجذع نفسه.','قصّ السعف الجاف مرة في السنة.','أضف سمادًا عضويًا في الربيع.']},
+  {id:'p2',n:'السدر',k:'شجرة',r:['najd','hijaz','asir'],sun:'شمس كاملة',w:'أسبوعيًا في السنة الأولى، ثم كل 2–3 أسابيع بعد أن تستقر',c:['اسقِ سقيات عميقة متباعدة ليمتد الجذر للأسفل.','قلّم الأغصان المتدلية قرب الأرض.','لا تكثر السماد، فهو شجرة تتحمل الجفاف.']},
+  {id:'p3',n:'الغاف',k:'شجرة',r:['najd','east','hijaz'],sun:'شمس كاملة',w:'كل 7–10 أيام في السنة الأولى، ثم نادرًا',c:['تتحمل الحرارة والملوحة المتوسطة.','وفّر لها مساحة حول الجذع بلا بلاط.','قلّم الأغصان الجافة في الشتاء.']},
+  {id:'p4',n:'الأثل',k:'شجرة',r:['east','najd','north'],sun:'شمس كاملة',w:'ري متوسط أسبوعيًا في السنة الأولى، ثم كل أسبوعين',c:['من أكثر الأشجار تحمّلًا للملوحة.','تصلح سياجًا وحاجز رياح.','قصّها بخفة للحفاظ على شكلها.']},
+  {id:'p5',n:'الجهنمية',k:'متسلقة',r:['hijaz','east','najd'],sun:'شمس كاملة',w:'ري متوسط كل 3–5 أيام صيفًا',c:['قلّمها بعد انتهاء الإزهار.','تزهر أكثر عند تقليل الري قليلًا.','ثبّتها على سور أو عريشة.']},
+  {id:'p6',n:'اللانتانا',k:'شجيرة',r:['najd','east','hijaz'],sun:'شمس كاملة',w:'كل 4–6 أيام صيفًا',c:['قصّ الأزهار الذابلة لتزهر من جديد.','ثمارها غير صالحة للأكل، فأبعدها عن الأطفال.','تحتاج تربة جيدة التصريف.']},
+  {id:'p7',n:'النيم',k:'شجرة',r:['hijaz','east','najd'],sun:'شمس كاملة',w:'كل 5–7 أيام في السنة الأولى، ثم كل 10–14 يومًا',c:['تنمو بسرعة وتعطي ظلًا جيدًا.','اترك مسافة عن الجدران والأنابيب.','قلّم الأغصان الضعيفة مرة في السنة.']},
+  {id:'p8',n:'العرعر',k:'شجرة',r:['asir','north'],sun:'شمس كاملة',w:'كل 10–14 يومًا، وأقل في الشتاء',c:['لا تُغرق الجذور بالماء.','تحتاج تربة جيدة التصريف.','يغنيها المطر الموسمي عن كثير من الري.']},
+  {id:'p9',n:'الزيتون',k:'شجرة',r:['north','asir'],sun:'شمس كاملة',w:'ري عميق كل 7–10 أيام صيفًا',c:['قلّمه في نهاية الشتاء.','يحب التربة الخفيفة جيدة التصريف.','يتحمل الجفاف أكثر مما يتحمل التشبّع بالماء.']},
+  {id:'p10',n:'اللافندر والروزماري',k:'شجيرة',r:['asir','north'],sun:'شمس كاملة',w:'ري خفيف كل 5–7 أيام',c:['اترك التربة تجف بين السقيات.','قصّها بعد الإزهار للحفاظ على شكلها.','تجنب التربة الطينية الثقيلة.']},
+  {id:'p11',n:'الصبار والألوفيرا',k:'عصارية',r:['najd','hijaz','east'],sun:'شمس كاملة أو ظل خفيف',w:'ري قليل جدًا، مرة كل 10–14 يومًا',c:['لا تناسب الري المتكرر، فالماء الزائد يعفّن جذورها.','ازرعها في تربة رملية خفيفة.','اسقها بعد جفاف التربة تمامًا.']},
+  {id:'p12',n:'الورد البلدي',k:'شجيرة',r:['asir','north'],sun:'شمس صباحية',w:'كل 3–4 أيام في الجو الدافئ',c:['اسقِ عند الجذر دون ترطيب الأوراق.','قلّم في أواخر الشتاء.','أضف سمادًا عضويًا مرتين في الموسم.']},
+  {id:'p13',n:'الطلح',k:'شجرة',r:['najd','asir','hijaz'],sun:'شمس كاملة',w:'كل 10–14 يومًا في السنة الأولى، ثم نادرًا',c:['تتحمل الجفاف بعد استقرارها.','جذرها عميق، فاسقها سقيات عميقة قليلة.','لا تغرسها قرب الأساسات.']},
+  {id:'p14',n:'الهيبسكس',k:'شجيرة',r:['hijaz','east'],sun:'شمس كاملة أو ظل جزئي',w:'ري متوسط كل 2–3 أيام صيفًا',c:['تحب الرطوبة وتتحمل الحرارة.','قلّمها كل سنة للحفاظ على الكثافة.','أضف سمادًا خفيفًا في الربيع.']}
+];
+const GW_RULES=[
+  'اسقِ التربة عند الجذور (بالتنقيط أو بحوض)، ولا تسقِ الأوراق.',
+  'لا تستخدمها لسقي الخضار أو الأوراق التي تُؤكل نيئة.',
+  'استخدم المياه خلال يوم من جمعها، ولا تخزّنها طويلًا.',
+  'استخدم منظفات خفيفة مناسبة للنبات، وتجنّب المبيضات.',
+  'اسقِ بمياه عذبة بين فترة وأخرى لتقليل تراكم الأملاح في التربة.',
+  'لا تُستخدم مياه المطبخ أو الحفاضات أو المواد الكيميائية القوية.'
+];
+
+const Plants = ({s,go,setS,say}) => {
+  const [open,setOpen]=useState(null);
+  const reg=REGIONS.find(r=>r.id===s.region)||REGIONS[0];
+  const list=PLANTS.filter(p=>p.r.includes(reg.id));
+  const toggle=id=>{
+    const has=s.myPlants.includes(id);
+    setS({...s,myPlants:has?s.myPlants.filter(x=>x!==id):[...s.myPlants,id]});
+    say(has?'أُزيلت من حديقتي':'أُضيفت إلى حديقتي 🌱');
+  };
+  return html`<main class="screen">
+    <${Seg} items=${[{id:'impact',l:'أثري'},{id:'stats',l:'بالأرقام'},{id:'plants',l:'دليل النبات'}]} cur="plants" go=${go}/>
+    <div><h1 class="h2">النبات المناسب لمنطقتك</h1><p class="sub">اختر منطقتك لترى النباتات الأنسب للري بالمياه الرمادية المعالجة وكيف تعتني بها.</p></div>
+    <div role="group" aria-label="اختيار المنطقة" style=${{display:'flex',flexWrap:'wrap',gap:8}}>
+      ${REGIONS.map(r=>html`<button key=${r.id} class="chip" aria-pressed=${r.id===reg.id} onClick=${()=>{setS({...s,region:r.id});setOpen(null);}}
+        style=${{border:'1.5px solid '+(r.id===reg.id?'var(--leaf)':'var(--line)'),background:r.id===reg.id?'var(--leaf-soft)':'var(--surface)',color:r.id===reg.id?'var(--leaf-ink)':'var(--fg)',fontSize:13.5,padding:'8px 14px',fontWeight:700}}>${r.l}</button>`)}
+    </div>
+    <div class="card"><div class="between"><b>${reg.l}</b><span class="pill-s ok">${list.length} نباتات مقترحة</span></div><p class="sub">المناخ: ${reg.n}.</p>
+      <p class="sub" style=${{marginTop:6}}>في حديقتي الآن: <b class="num">${s.myPlants.length}</b> نبات.</p></div>
+    ${list.map(p=>{const on=open===p.id, mine=s.myPlants.includes(p.id);
+      return html`<section key=${p.id} class="card">
+        <div class="stage"><div class="badge-ic" style=${{background:'var(--leaf-soft)',color:'var(--leaf-ink)'}}><${Ic} n=${p.k==='شجرة'?'tree':'leaf'}/></div>
+          <div class="grow"><div class="between"><h2 class="dsp" style=${{fontSize:20}}>${p.n}</h2><span class="pill-s">${p.k}</span></div>
+            <p class="sub">${p.sun}</p><p style=${{marginTop:4}}>${p.w}</p></div></div>
+        ${on&&html`<ul style=${{margin:'12px 0 0',paddingInlineStart:20,display:'flex',flexDirection:'column',gap:4}}>${p.c.map((x,k)=>html`<li key=${k}>${x}</li>`)}</ul>`}
+        <div class="row" style=${{marginTop:12}}>
+          <button class="btn ghost sm" aria-expanded=${on} onClick=${()=>setOpen(on?null:p.id)}>${on?'إخفاء الرعاية':'كيف نرعاها؟'}</button>
+          <button class=${'btn sm'+(mine?' ghost':'')} onClick=${()=>toggle(p.id)}>${mine?'في حديقتي ✓':'أضفها لحديقتي'}</button></div>
+      </section>`;})}
+    <section class="card"><div class="between"><b>قواعد الري بالمياه الرمادية</b><${Ic} n="drop" s=${20}/></div>
+      <ul style=${{margin:'10px 0 0',paddingInlineStart:20,display:'flex',flexDirection:'column',gap:4}}>${GW_RULES.map((x,k)=>html`<li key=${k}>${x}</li>`)}</ul></section>
+    <${Note}>إرشادات عامة للعرض. يختلف الري حسب التربة والموسم وعمر النبتة، ويُرجع في المعالجة والاستخدام الفعلي إلى الأنظمة المحلية والجهات الزراعية المختصة.<//>
+  </main>`;
+};
+
+/* ---------- Overlays ---------- */
+const AddSheet = ({close,submit}) => {
+  const [l,setL]=useState(''),[p,setP]=useState('هذا الأسبوع'),[a,setA]=useState(''),[e,setE]=useState({});
+  const go=()=>{const er={},lv=parseFloat(l),av=parseFloat(a);
+    if(!(lv>0)) er.l='اكتب كمية أكبر من صفر.'; else if(lv>5000) er.l='الحد الأقصى في القراءة الواحدة 5,000 لتر.';
+    if(!(av>=0)||a==='') er.a='اكتب المساحة بالمتر المربع (يمكن أن تكون 0).'; else if(av>200) er.a='الحد الأقصى 200 م².';
+    setE(er); if(!Object.keys(er).length) submit({liters:lv,period:p,area:av}); };
+  return html`<div class="backdrop" onClick=${close}><form class="sheet" onClick=${ev=>ev.stopPropagation()} onSubmit=${ev=>{ev.preventDefault();go();}} style=${{display:'flex',flexDirection:'column',gap:14}} role="dialog" aria-label="إضافة قراءة جديدة">
+    <div class="between"><h2 class="dsp" style=${{fontSize:22}}>إضافة قراءة جديدة</h2><button type="button" class="link" onClick=${close} aria-label="إغلاق"><${Ic} n="close"/></button></div>
+    <div class="field"><label for="f-liters">كمية المياه المعاد استخدامها (لتر)</label><input id="f-liters" class="input" type="number" inputMode="decimal" min="1" placeholder="مثال: 180" value=${l} onInput=${ev=>setL(ev.target.value)}/>${e.l&&html`<span class="err">${e.l}</span>`}</div>
+    <div class="field"><label for="f-period">الفترة الزمنية</label><select id="f-period" class="input" value=${p} onChange=${ev=>setP(ev.target.value)}><option>اليوم</option><option>هذا الأسبوع</option><option>هذا الشهر</option></select></div>
+    <div class="field"><label for="f-area">المساحة التي تم ريها (م²)</label><input id="f-area" class="input" type="number" inputMode="decimal" min="0" placeholder="مثال: 4" value=${a} onInput=${ev=>setA(ev.target.value)}/>${e.a&&html`<span class="err">${e.a}</span>`}</div>
+    <button class="btn" type="submit">حفظ القراءة وتحديث المؤشرات</button>
+    <p class="sub" style=${{fontSize:12,textAlign:'center'}}>إدخال يدوي للعرض. لاحقًا تصل القراءة من عدّاد أو حساس.</p>
+  </form></div>`;
+};
+
+const Journey = ({close,hoodIdx}) => {
+  const [st,setSt]=useState(0), [run,setRun]=useState(true);
+  useEffect(()=>{ if(!run) return; const t=setInterval(()=>setSt(x=>{ if(x>=JOURNEY.length-1){clearInterval(t);setRun(false);return x;} return x+1;}),1500); return()=>clearInterval(t); },[run]);
+  const X=i=>i%2===0?90:230, Y=i=>42+i*72, cur=JOURNEY[st];
+  return html`<div class="backdrop" onClick=${close}><div class="sheet" onClick=${e=>e.stopPropagation()} role="dialog" aria-label="رحلة القطرة" style=${{maxHeight:'96%'}}>
+    <div class="between"><h2 class="dsp" style=${{fontSize:22}}>رحلة القطرة</h2><button class="link" onClick=${close} aria-label="إغلاق"><${Ic} n="close"/></button></div>
+    <svg viewBox="0 0 320 540" width="100%" style=${{maxHeight:'54vh'}} aria-hidden="true">
+      ${JOURNEY.slice(0,-1).map((_,i)=>{const ym=(Y(i)+Y(i+1))/2;
+        return html`<path key=${i} d=${'M'+X(i)+' '+Y(i)+' C'+X(i)+' '+ym+' '+X(i+1)+' '+ym+' '+X(i+1)+' '+Y(i+1)} fill="none" stroke=${i<st?'var(--water)':'var(--line)'} strokeWidth="4" strokeLinecap="round" strokeDasharray=${i<st?'0':'2 8'} style=${{transition:'stroke .4s'}}/>`;})}
+      ${JOURNEY.map((n,i)=>{const on=i===st,past=i<st;
+        return html`<g key=${i}>
+          <circle cx=${X(i)} cy=${Y(i)} r="24" fill=${past||on?'var(--leaf)':'var(--surface)'} stroke=${past||on?'var(--leaf)':'var(--line)'} strokeWidth="3" style=${{transition:'fill .4s'}}/>
+          <g transform=${'translate('+(X(i)-12)+','+(Y(i)-12)+')'} fill="none" stroke=${past||on?'#fff':'var(--muted)'} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d=${P[n.ic]}/></g>
+          <text x=${X(i)} y=${Y(i)+40} textAnchor="middle" className=${on?'t-fg':'t-muted'} style=${{fontSize:on?'13px':'11px'}}>${n.t}</text></g>`;})}
+      <g style=${{transform:'translate('+X(st)+'px,'+(Y(st)-44)+'px)',transition:'transform 1.2s cubic-bezier(.5,0,.3,1)'}}>
+        <path d="M0 -12c6 7 10 12 10 17a10 10 0 0 1-20 0c0-5 4-10 10-17z" fill="var(--water)" stroke="var(--surface)" strokeWidth="2"/></g>
+    </svg>
+    <div class="card" style=${{marginTop:6}} aria-live="polite">
+      <div class="lbl">${st+1} من ${JOURNEY.length}</div>
+      <b class="dsp" style=${{fontSize:20}}>${cur.t}</b><p class="sub">${cur.d}</p>
+      ${st===JOURNEY.length-1&&html`<div class="row" style=${{marginTop:8}}><${Gauge} v=${hoodIdx} size=${84}/><b style=${{color:'var(--leaf-ink)'}}>قطرتك صارت جزءًا من مؤشر الحي.</b></div>`}
+    </div>
+    <div class="row" style=${{marginTop:12}}>
+      <button class="btn ghost sm" onClick=${()=>{setSt(0);setRun(true);}}><${Ic} n="refresh" s=${18}/> أعد التشغيل</button>
+      <button class="btn sm" onClick=${close}>إغلاق</button></div>
+    <p class="sub" style=${{fontSize:12,marginTop:8,textAlign:'center'}}>عرض توضيحي لفكرة المشروع، وليس قياسًا فعليًا.</p>
+  </div></div>`;
+};
+
+/* ---------- App ---------- */
+const NAV = [{id:'home',l:'الرئيسية',ic:'home',g:['home','cycle']},{id:'impact',l:'أثري',ic:'drop',g:['impact','stats','plants']},{id:'hood',l:'الحي',ic:'hood',g:['hood','map']},{id:'challenges',l:'التحديات',ic:'trophy',g:['challenges','badges']},{id:'profile',l:'حسابي',ic:'user',g:['profile']}];
+
+const App = () => {
+  const [s,setS]=useState(()=>DataSource.load());
+  const [scr,setScr]=useState('welcome');
+  const [sheet,setSheet]=useState(null);
+  const [toast,setToast]=useState('');
+  const tt=useRef();
+  useEffect(()=>{DataSource.save(s)},[s]);
+  const say=m=>{setToast(m);clearTimeout(tt.current);tt.current=setTimeout(()=>setToast(''),2800)};
+  const go=id=>{setScr(id);window.scrollTo(0,0)};
+
+  const hood={liters:24680+(s.liters-1240),trees:124+(s.trees-6),area:860+(s.area-18),homes:48+(s.invited-3)};
+  const idx=Math.min(100,Math.min(1,hood.liters/30000)*40+Math.min(1,hood.trees/150)*25+Math.min(1,hood.area/1000)*20+Math.min(1,hood.homes/60)*15);
+  const list=[
+    {id:'c1',ic:'leaf',title:'تحدي الأسبوع الأخضر',desc:'إعادة استخدام 500 لتر من المياه.',goal:500,cur:s.weekLiters,unit:'لتر',pts:100,badge:'صانع الأثر'},
+    {id:'c2',ic:'drop',title:'قطرة تصنع فرقًا',desc:'الوصول إلى 1,000 لتر مياه معاد استخدامها.',goal:1000,cur:s.liters,unit:'لتر',pts:150,badge:'حافظ الماء'},
+    {id:'c3',ic:'hood',title:'جارٍ أخضر',desc:'المشاركة مع 5 منازل في الحي.',goal:5,cur:s.invited,unit:'منازل',pts:120,badge:'جارٍ مستدام'}
+  ];
+  const nextCh=list.filter(c=>!s.claimed.includes(c.id)).sort((a,b)=>b.cur/b.goal-a.cur/a.goal)[0];
+
+  const addReading=r=>{
+    const ns={...s,liters:s.liters+r.liters,area:+(s.area+r.area).toFixed(1),weekLiters:s.weekLiters+(r.period==='هذا الشهر'?0:r.liters),
+      trees:6+Math.floor((s.area+r.area-18)/3),plants:22+Math.round((s.area+r.area-18)*1.5),
+      reduction:Math.min(80,24+Math.floor((s.liters+r.liters-1240)/40)),points:s.points+5+Math.floor(r.liters/10),
+      readings:[{id:Date.now(),...r,source:'manual'},...s.readings]};
+    ns.area=Math.round(ns.area*10)/10;
+    setS(ns); setSheet(null);
+    const doneNow=[ns.weekLiters>=500&&!s.claimed.includes('c1')&&s.weekLiters<500, ns.liters>=1000&&!s.claimed.includes('c2')&&s.liters<1000];
+    const ready=doneNow.some(Boolean);
+    say(ready?'تم تحديث المؤشرات، وهناك تحدٍّ جاهز للاستلام 🏆':'تم تحديث المؤشرات ✓');
+  };
+  const claim=c=>{ if(s.claimed.includes(c.id)||c.cur<c.goal) return; setS({...s,claimed:[...s.claimed,c.id],points:s.points+c.pts}); say('حصلت على شارة «'+c.badge+'» و '+c.pts+' نقطة 🎉'); };
+  const invite=()=>{ if(s.invited>=5) return; setS({...s,invited:s.invited+1}); say('انضم جار جديد إلى حيّك (محاكاة)'); };
+  const reset=()=>{DataSource.clear();setS(JSON.parse(JSON.stringify(BASE)));say('أُعيدت بيانات العرض');};
+
+  if(scr==='welcome') return html`<div class="shell"><${Welcome} start=${()=>go('home')}/></div>`;
+  const cur=NAV.find(n=>n.g.includes(scr));
+  const openAdd=()=>setSheet('add'), openJ=()=>setSheet('journey');
+  let body;
+  if(scr==='home') body=html`<${Home} s=${s} go=${go} openAdd=${openAdd} openJourney=${openJ} nextCh=${nextCh}/>`;
+  else if(scr==='cycle') body=html`<${Cycle} go=${go}/>`;
+  else if(scr==='impact') body=html`<${Impact} s=${s} go=${go} openAdd=${openAdd}/>`;
+  else if(scr==='stats') body=html`<${Stats} s=${s} hood=${hood} go=${go}/>`;
+  else if(scr==='plants') body=html`<${Plants} s=${s} go=${go} setS=${setS} say=${say}/>`;
+  else if(scr==='hood') body=html`<${Hood} hood=${hood} idx=${idx} go=${go}/>`;
+  else if(scr==='map') body=html`<${MapView} s=${s} go=${go}/>`;
+  else if(scr==='challenges') body=html`<${Challenges} s=${s} go=${go} list=${list} claim=${claim} invite=${invite}/>`;
+  else if(scr==='badges') body=html`<${Badges} s=${s} go=${go}/>`;
+  else body=html`<${Profile} s=${s} go=${go} list=${list} reset=${reset} openJourney=${openJ}/>`;
+
+  return html`<div class="shell">
+    <${TopBar}/>
+    <div key=${scr}>${body}</div>
+    <nav class="nav" aria-label="التنقل الرئيسي">${NAV.map(n=>html`<button key=${n.id} aria-current=${cur&&cur.id===n.id?'page':undefined} onClick=${()=>go(n.id)}><span class="pill"><${Ic} n=${n.ic} s=${22}/></span>${n.l}</button>`)}</nav>
+    ${sheet==='add'&&html`<${AddSheet} close=${()=>setSheet(null)} submit=${addReading}/>`}
+    ${sheet==='journey'&&html`<${Journey} close=${()=>setSheet(null)} hoodIdx=${idx}/>`}
+    ${toast&&html`<div class="toast" role="status">${toast}</div>`}
+  </div>`;
+};
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
+</script>
+
+</body></html>
